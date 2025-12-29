@@ -23,7 +23,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generate Prisma Client
-RUN pnpm prisma:generate
+RUN pnpm prisma generate
 
 # Build TypeScript
 RUN pnpm build
@@ -44,7 +44,6 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules ./node_modules
 
 # Create uploads directory
