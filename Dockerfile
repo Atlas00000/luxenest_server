@@ -1,8 +1,9 @@
 # Multi-stage build for LuxeNest Server
 FROM node:20-alpine AS base
 
-# Install pnpm
-RUN npm install -g pnpm@latest
+# Install pnpm and OpenSSL (required for Prisma)
+RUN npm install -g pnpm@latest && \
+    apk add --no-cache openssl1.1-compat
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -31,6 +32,9 @@ RUN pnpm build
 # Production image, copy all the files and run the server
 FROM base AS runner
 WORKDIR /app
+
+# Install OpenSSL for Prisma in production
+RUN apk add --no-cache openssl1.1-compat
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs && \
