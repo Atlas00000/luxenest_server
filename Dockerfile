@@ -1,9 +1,8 @@
 # Multi-stage build for LuxeNest Server
-FROM node:20-alpine AS base
+FROM node:20-slim AS base
 
-# Install pnpm and OpenSSL (required for Prisma)
-RUN npm install -g pnpm@latest && \
-    apk add --no-cache openssl1.1-compat
+# Install pnpm
+RUN npm install -g pnpm@latest
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -33,12 +32,9 @@ RUN pnpm build
 FROM base AS runner
 WORKDIR /app
 
-# Install OpenSSL for Prisma in production
-RUN apk add --no-cache openssl1.1-compat
-
 # Create a non-root user
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nodejs
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid nodejs nodejs
 
 # Set production environment
 ENV NODE_ENV=production
