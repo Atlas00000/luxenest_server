@@ -1,0 +1,1 @@
+{"version":3,"file":"wishlist.validation.js","sourceRoot":"","sources":["../../src/validations/wishlist.validation.ts"],"names":[],"mappings":";;;AAAA,6BAAwB;AAExB,8BAA8B;AACjB,QAAA,oBAAoB,GAAG,OAAC,CAAC,MAAM,CAAC;IAC3C,MAAM,EAAE,OAAC,CAAC,MAAM,CAAC;QACf,SAAS,EAAE,OAAC,CAAC,MAAM,EAAE,CAAC,IAAI,CAAC,oBAAoB,CAAC;KACjD,CAAC;CACH,CAAC,CAAC"}
