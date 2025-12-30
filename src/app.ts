@@ -74,21 +74,50 @@ app.use(errorHandler);
 // Initialize server
 export const startServer = async (): Promise<void> => {
   try {
-    // Connect to database
+    console.log('📋 Step 1/3: Initializing Express app...');
+    console.log(`   ✓ Express app initialized`);
+    console.log(`   ✓ Middleware configured`);
+    console.log(`   ✓ Routes registered`);
+    
+    console.log('📋 Step 2/3: Connecting to database...');
     await connectDatabase();
+    console.log(`   ✓ Database connection successful`);
     
-    // Connect to Redis (non-blocking)
+    console.log('📋 Step 3/3: Connecting to Redis (non-blocking)...');
     await connectRedis();
+    console.log(`   ✓ Redis connection attempt completed`);
     
-    // Start server
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🔗 CORS enabled for: ${CORS_ORIGIN}`);
+    console.log('📋 Starting HTTP server...');
+    const server = app.listen(PORT, () => {
+      console.log('='.repeat(60));
+      console.log('✅ Server successfully started!');
+      console.log('='.repeat(60));
+      console.log(`🌐 Server URL: http://localhost:${PORT}`);
+      console.log(`🔗 Health Check: http://localhost:${PORT}/health`);
+      console.log(`📡 API Base URL: http://localhost:${PORT}/api/v1`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🔐 CORS Origins: ${CORS_ORIGIN}`);
+      console.log(`📅 Started At: ${new Date().toISOString()}`);
+      console.log('='.repeat(60));
+    });
+    
+    // Log any server errors
+    server.on('error', (error: Error) => {
+      console.error('❌ HTTP server error:', error);
+      console.error('Stack:', error.stack);
     });
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    console.error('='.repeat(60));
+    console.error('❌ FAILED TO START SERVER');
+    console.error('='.repeat(60));
+    console.error('Error Type:', error?.constructor?.name || 'Unknown');
+    console.error('Error Message:', error instanceof Error ? error.message : String(error));
+    if (error instanceof Error && error.stack) {
+      console.error('Stack Trace:');
+      console.error(error.stack);
+    }
+    console.error('='.repeat(60));
+    throw error; // Re-throw to be caught by server.ts
   }
 };
 
